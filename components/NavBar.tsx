@@ -1,15 +1,13 @@
 import React from 'react'
 import Link from "next/link";
 import Image from "next/image";
-import { auth, signOut, signIn } from "../../auth";
+import { auth, signOut, signIn } from "../auth";
 const NavBar = async () => {
     const session = await auth()
     return (
-        <header
-            style={{ border: '1px solid black' }}
-            className="px-5 py-3 bg-white shadow-sm font-work-sans">
-            <nav 
-            className="flex justify-between items-center">
+        <header className="px-5 py-3 bg-white shadow-sm font-work-sans">
+            <nav
+                className="flex justify-between items-center">
                 <Link href="/" className="flex items-center">
                     <Image src="/logo.png" alt="logo" width={144} height={30} />
                 </Link>
