@@ -7,9 +7,9 @@ import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 
 export type Author = {
-    _id: "author456",
-    name: "Alice Johnson",
-    image: "/images/authors/alice.jpg",
+    _id: number,
+    name: string,
+    image: string,
   };
   
 export type Startup = {
@@ -24,7 +24,9 @@ export type Startup = {
   };
 export type StartupTypeCard = Omit<Startup, "author"> & { author?: Author };
 
-const StartupCard = ({ post }: { post: StartupTypeCard }) => {
+const StartupCard = (post : StartupTypeCard) => {
+  console.log('check', post)
+ 
   const {
     _createdAt,
     views,

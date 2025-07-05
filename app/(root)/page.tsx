@@ -24,11 +24,11 @@ export default async function Home({
       title: "TechNova",
       description: "Revolutionizing cloud infrastructure with AI.",
       image: "/images/technova.jpg",
-      // author: {
-      //   _id: "author1",
-      //   name: "Jane Doe",
-      //   image: "/avatars/jane.jpg",
-      // },
+      author: {
+        _id: 456,
+        name: "Ammar",
+        image: "/images/authors/alice.jpg",
+      },
       category: "Technology",
       views: 1024,
     },
@@ -60,7 +60,7 @@ export default async function Home({
         <ul className="mt-7 card_grid">
           {posts?.length > 0 ? (
             posts.map((post: StartupTypeCard) => (
-              <StartupCard key={post?._id} post={post} />
+              <StartupCard key={post?._id} {...post} />
             ))
           ) : (
             <p className="no-results">No startups found</p>
