@@ -25,7 +25,6 @@ export type Startup = {
 export type StartupTypeCard = Omit<Startup, "author"> & { author?: Author };
 
 const StartupCard = (post : StartupTypeCard) => {
-  console.log('check', post)
  
   const {
     _createdAt,

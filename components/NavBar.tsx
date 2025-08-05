@@ -2,8 +2,11 @@ import React from 'react'
 import Link from "next/link";
 import Image from "next/image";
 import { auth, signOut, signIn } from "../auth";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+
 const NavBar = async () => {
     const session = await auth()
+    console.log('session', session)
     return (
         <header className="px-5 py-3 bg-white shadow-sm font-work-sans">
             <nav
@@ -29,7 +32,13 @@ const NavBar = async () => {
                                 </button>
                             </form>
                             <Link href={`/user/${session?.user?.id}`} className="flex items-center">
-                                <span>{session?.user?.name}</span>
+                                <Avatar className="size-10">
+                                    <AvatarImage
+                                        src={session?.user?.image || ""}
+                                        alt={session?.user?.name || ""}
+                                    />
+                                    <AvatarFallback>AV</AvatarFallback>
+                                </Avatar>
                             </Link>
                         </>
                     ) : (
