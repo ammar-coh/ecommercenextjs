@@ -33,9 +33,9 @@ const paginationStrategies: Record<paginationType, IPaginationStrategy> = {
   },
   
 
-  page: async (value, limit,filter) => {
+  page: async (value, limit, _direction, filter) => {
     const offset = (parseInt(value) - 1) * limit
-    return await Startup.find()
+    return await Startup.find({...filter})
       .sort({ _id: 1 })
       .skip(offset)
       .limit(limit);
@@ -115,7 +115,7 @@ export async function GET(req: NextRequest) {
     const filter: Record<string, any> = {};
     const authorID = searchParams.get("authorID");
     if (authorID) filter.author = new mongoose.Types.ObjectId(authorID)
-    const startups = await paginationStrategies[strategyKey](value, limit, direction,filter);
+    const startups = await paginationStrategies[strategyKey](value, limit, direction,filter||{});
 
     return NextResponse.json(
       {
