@@ -6,17 +6,22 @@ import slugify from "slugify";
 import { auth } from "../../../auth"
 import mongoose from 'mongoose';
 
+type filters = 'author' 
 interface IPaginationStrategy {
-  (value: string, limit: number, direction?: "next" | "prev"): Promise<IStartup[]>;
+  (value: string, limit: number, direction?: "next" | "prev",
+    filter?: Record<filters,string>   // filter is an obj with key = authorID and value  = string    filter={authorID:String}
+   ): Promise<IStartup[]>;
 }
 type paginationType = 'cursor' | 'page' | 'default'
 
+
 const paginationStrategies: Record<paginationType, IPaginationStrategy> = {
-  cursor: async (value, limit, direction) => {
+  cursor: async (value, limit, direction,filter) => {
+    console.log('author',filter)
     const cursorId = new mongoose.Types.ObjectId(value);
     const isPrev = direction === "prev";
 
-    const query = {
+    const query = {...filter,
       _id: { [isPrev ? "$lt" : "$gt"]: cursorId },
     };
 
@@ -28,7 +33,7 @@ const paginationStrategies: Record<paginationType, IPaginationStrategy> = {
   },
   
 
-  page: async (value, limit) => {
+  page: async (value, limit,filter) => {
     const offset = (parseInt(value) - 1) * limit
     return await Startup.find()
       .sort({ _id: 1 })
@@ -107,8 +112,10 @@ export async function GET(req: NextRequest) {
           : "default";
 
     const value = searchParams.get(strategyKey) || "";
-
-    const startups = await paginationStrategies[strategyKey](value, limit, direction);
+    const filter: Record<string, any> = {};
+    const authorID = searchParams.get("authorID");
+    if (authorID) filter.author = new mongoose.Types.ObjectId(authorID)
+    const startups = await paginationStrategies[strategyKey](value, limit, direction,filter);
 
     return NextResponse.json(
       {
